@@ -16,8 +16,8 @@ import {
     password: "",
   };
 
-export default function LoginScreen (){
-  console.log(Platform.OS);
+export default function LoginScreen ({navigation}){
+  // console.log(Platform.OS);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
 
@@ -88,6 +88,9 @@ export default function LoginScreen (){
             >
               <Text style={styles.btnTitle}>LOGIN</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Registration")} style={styles.log_in_page_link}>
+                    <Text style={styles.registration_page_link__text}>no account? register now</Text>
+                  </TouchableOpacity> 
           </View>
         </KeyboardAvoidingView>
       </ImageBackground>

@@ -17,8 +17,8 @@ import {
     password: "",
   };
 
-export default function RegistrationScreen (){
-  console.log(Platform.OS);
+export default function RegistrationScreen ({navigation}){
+  // console.log(Platform.OS);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
 
@@ -26,6 +26,7 @@ export default function RegistrationScreen (){
     Dimensions.get("window").width - 20 * 2
   );
 
+  
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width - 20 * 2;
@@ -55,9 +56,9 @@ export default function RegistrationScreen (){
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
-          <View
-            style={{ ...styles.form, marginBottom: isShowKeyboard ? 20 : 100, width: dimensions,}}
-          >
+        <View
+          style={{ ...styles.form, marginBottom: isShowKeyboard ? 20 : 100, width: dimensions,}}
+        >
             <View>
               <Text style={styles.headerTitle}>Registration</Text>
               <Text style={styles.inputTitle}>LOGIN</Text>
@@ -97,6 +98,9 @@ export default function RegistrationScreen (){
             >
               <Text style={styles.btnTitle}>SIGN IN</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")} style = {styles.log_in_page_link}>
+                  <Text style = {styles.log_in_page_link__text}>Already have an account? Log In!</Text>
+                </TouchableOpacity> 
           </View>
         </KeyboardAvoidingView>
       </ImageBackground>
@@ -158,5 +162,15 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 40,
     fontFamily: "Roboto-Bold",
-  }
+  },
+  registration_page_link__text: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    fontWeight: "400",
+    lineHeight: 19,
+    letterSpacing: 0,
+
+    textAlign: "center",
+    color: "#1B4371",
+  },
 }); 
