@@ -153,4 +153,4 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontFamily: "Roboto-Bold",
   }
-}); 
+});
