@@ -30,7 +30,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
     <MainTab.Navigator screenOptions={{ tabBarShowLabel: false}}>
       <MainTab.Screen 
         options={{
-            
+          headerShown: false,
             tabBarIcon: ({ focused, size, color }) => (
                 <AntDesign name="appstore-o" size={size} color={color} />
             ),
@@ -39,6 +39,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
         component={PostsScreen} />
       <MainTab.Screen
         options={{
+          headerShown: false,
             tabBarIcon: ({ focused, size, color }) => (
                 <AntDesign name="pluscircleo" size={35} color={color} />
             ),
@@ -47,7 +48,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
         component={CreatePostsScreen} />
       <MainTab.Screen
         options={{
-            
+          headerShown: false,
             tabBarIcon: ({ focused, size, color }) => (
                 <MaterialCommunityIcons name="snowman" size={size} color={color} />
             ),
