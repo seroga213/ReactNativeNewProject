@@ -1,6 +1,9 @@
 import React, {useState ,useEffect } from "react";
 import { View, Text, StyleSheet,TouchableOpacity, FlatList, Image } from "react-native";
+import { useDispatch } from "react-redux";
+import { authSignOutUser } from "../../redux/auth/authOperations";
 
+import db from "../../firebase/config";
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -9,8 +12,13 @@ import { FontAwesome } from '@expo/vector-icons';
 
 
 const DefaultPostsScreen = ({ navigation ,route }) => {
+  const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
   console.log("route.params", route.params);
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
 
   useEffect(() => {
     if (route.params) {
@@ -56,6 +64,7 @@ const DefaultPostsScreen = ({ navigation ,route }) => {
       <TouchableOpacity
               style={styles.logout}
               title="Log out"
+              onPress={signOut}
               >
                 <MaterialIcons name="logout" size={24} color="black" />
             </TouchableOpacity>

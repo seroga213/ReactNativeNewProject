@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { View, Text, StyleSheet,TouchableOpacity, Image, TextInput,  } from "react-native";
 import { Camera } from 'expo-camera'; 
+import db from "../../firebase/config";
 
 const CreateScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -16,9 +17,22 @@ const CreateScreen = ({ navigation }) => {
   };
 
   const sendPhoto = () => {
+    uploadPhotoToServer();
     console.log("navigation", navigation);
     navigation.navigate("DefaultScreen", { photo });
+    
   };
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+
+    const uniquePostId = Date.now().toString();
+
+    const data = await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+    console.log("data", data);
+  };
+
 
   return (
     <View style={styles.container}>

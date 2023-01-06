@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Main from "./components/Main";
 
-import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from "react-redux";
 
-import { useRoute } from "./router";
+import { store } from "./redux/store";
 
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 
 export default function App() {
-  const routing = useRoute(true);
   const [fontsLoaded] = Font.useFonts({
     "Roboto-Regular":require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium":require("./assets/fonts/Roboto-Medium.ttf"),
@@ -26,9 +26,8 @@ useEffect(() => {
     SplashScreen.hideAsync();
   }
   return (
-    <NavigationContainer>  
-       {routing}
-    </NavigationContainer>
-
+    <Provider store={store}>
+      <Main />
+    </Provider>
     );
 }

@@ -5,6 +5,7 @@ import CommentsScreen from "../nestedScreens/CommentsScreen";
 import MapScreen from "../nestedScreens/MapScreen";
 
 
+
 const NestedScreen = createStackNavigator();
 
 const PostsScreen = () => {

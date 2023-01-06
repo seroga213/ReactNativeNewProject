@@ -11,6 +11,9 @@ import {
   ImageBackground,
   Dimensions, } from 'react-native';
 
+  import { useDispatch } from "react-redux";
+  import { authSignInUser } from "../../redux/auth/authOperations";
+
   const initialState = {
     email: "",
     password: "",
@@ -20,6 +23,7 @@ export default function LoginScreen ({navigation}){
   // console.log(Platform.OS);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
+  const dispatch = useDispatch();
 
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 20 * 2
@@ -37,13 +41,21 @@ export default function LoginScreen ({navigation}){
     };
   }, []);
 
-
-  const keyboardHide = () => {
+  const handleSubmit = () => {
+    console.log("click");
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+    dispatch(authSignInUser(state));
     setstate(initialState);
   };
+
+
+  // const keyboardHide = () => {
+  //   setIsShowKeyboard(false);
+  //   Keyboard.dismiss();
+  //   console.log(state);
+  //   setstate(initialState);
+  // };
 
   return (
     <View style={styles.container}>
@@ -84,7 +96,7 @@ export default function LoginScreen ({navigation}){
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.btn}
-              onPress={keyboardHide}
+              onPress={handleSubmit}
             >
               <Text style={styles.btnTitle}>LOGIN</Text>
             </TouchableOpacity>
