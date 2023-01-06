@@ -16,16 +16,22 @@ const DefaultPostsScreen = ({ navigation ,route }) => {
   const [posts, setPosts] = useState([]);
   console.log("route.params", route.params);
 
+  const getAllPost = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+  };
+
   const signOut = () => {
     dispatch(authSignOutUser());
   };
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
-  console.log("posts", posts);
+    getAllPost();
+  }, []);
   return (
     <View style={styles.container}>
       
@@ -44,17 +50,21 @@ const DefaultPostsScreen = ({ navigation ,route }) => {
               source={{ uri: item.photo }}
               style={{ width: 350, height: 200 }}
               />
-            <Text>{route.params.title}</Text>
+            
 
             <View>
               <TouchableOpacity>
-                <FontAwesome name="comment-o" onPress={() => navigation.navigate("Comments")} size={24} color="black" />
+                <FontAwesome name="comment-o" onPress={() =>
+                  navigation.navigate("Comments", { postId: item.id })
+                } size={24} color="black" />
               </TouchableOpacity>
 
               <TouchableOpacity>
                 <Text>
-                  <AntDesign name="enviromento"  onPress={() => navigation.navigate("Map")} size={24} color="black" />
-                  {route.params.location}
+                  <AntDesign name="enviromento"  onPress={() =>
+                  navigation.navigate("Map", { location: item.location })
+                } size={24} color="black" />
+                  
                 </Text>
               </TouchableOpacity>
             </View>

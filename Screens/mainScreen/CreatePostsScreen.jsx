@@ -1,26 +1,52 @@
-import React, {useState} from "react";
-import { View, Text, StyleSheet,TouchableOpacity, Image, TextInput,  } from "react-native";
-import { Camera } from 'expo-camera'; 
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { View, Text, StyleSheet, Image, TextInput } from "react-native";
+import { Camera } from "expo-camera";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import * as Location from "expo-location";
 import db from "../../firebase/config";
 
 const CreateScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
+  const [comment, setComment] = useState("");
+  const [location, setLocation] = useState(null);
+
+  const { userId, nickName } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+
+      let locationRes = await Location.getCurrentPositionAsync({});
+      setLocation(locationRes);
+    })();
+  }, []);
 
   const takePhoto = async () => {
-    const photo = await camera.takePictureAsync();
-    setPhoto(photo.uri);
-    console.log("photo", photo);  
+    console.log("location", location);
+    console.log("comment", comment);
+
+    const { uri } = await camera.takePictureAsync();
+
+    setPhoto(uri);
+    console.log("photo uri ", uri);
   };
 
   const sendPhoto = () => {
-    uploadPhotoToServer();
-    console.log("navigation", navigation);
+    uploadPostToServer();
     navigation.navigate("DefaultScreen", { photo });
-    
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await db
+      .firestore()
+      .collection("posts")
+      .add({ photo, comment, location: location.coords, userId, nickName });
   };
 
   const uploadPhotoToServer = async () => {
@@ -29,11 +55,16 @@ const CreateScreen = ({ navigation }) => {
 
     const uniquePostId = Date.now().toString();
 
-    const data = await db.storage().ref(`postImage/${uniquePostId}`).put(file);
-    console.log("data", data);
+    await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+
+    const processedPhoto = await db
+      .storage()
+      .ref("postImage")
+      .child(uniquePostId)
+      .getDownloadURL();
+
+    return processedPhoto;
   };
-
-
   return (
     <View style={styles.container}>
       <Camera style={styles.camera} ref={setCamera}>
